@@ -292,6 +292,9 @@ func (c *Client) onItem(item *Item, fn func(*Client, *bufio.ReadWriter, *Item) e
 	if err != nil {
 		return err
 	}
+	if addr == nil {
+		return ErrNoServers;
+	}
 	cn, err := c.getConn(addr)
 	if err != nil {
 		return err
@@ -337,6 +340,9 @@ func (c *Client) withKeyAddr(key string, fn func(net.Addr) error) (err error) {
 	addr, err := c.selector.PickServer(key)
 	if err != nil {
 		return err
+	}
+	if addr == nil {
+		return ErrNoServers;
 	}
 	return fn(addr)
 }
